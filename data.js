@@ -34,10 +34,9 @@ const STYLE_BANDS = {
   Accommodating: { lowMax: 3, highMin: 7 },
 };
 
-// Profile descriptions shown on results screen. Each style has a short
-// summary used as the dominant-style narrative and a one-liner used in the
-// "About all five styles" disclosure. Original prose, written about the
-// well-known five-style conflict framework — edit freely for voice.
+// Profile descriptions shown on results screen. Each style has a high-score
+// interpretation, a low-score interpretation, and a short generic blurb used
+// in the "General sketches of the five styles" disclosure.
 const STYLE_PROFILES = {
   Competing: {
     tag: "Assertive · Low concern for relationship",

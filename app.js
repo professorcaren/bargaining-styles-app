@@ -263,7 +263,7 @@
     els.profile.appendChild(h2);
 
     const intro = document.createElement("p");
-    intro.textContent = "Appendix A treats these results as a profile of stronger, moderate, and weaker inclinations, not as a single right or wrong style.";
+    intro.textContent = "Appendix A treats these results as a profile of stronger, moderate, and weaker inclinations relative to the book's executive comparison sample, not as a single right or wrong style.";
     els.profile.appendChild(intro);
 
     const summary = document.createElement("p");
