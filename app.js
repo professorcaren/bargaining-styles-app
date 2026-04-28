@@ -191,18 +191,35 @@
     return byStyle;
   }
 
-  function findDominant(scores) {
-    const max = Math.max(...Object.values(scores));
-    return STYLE_ORDER.filter((s) => scores[s] === max);
+  function classifyScores(scores) {
+    const strong = [];
+    const moderate = [];
+    const weak = [];
+
+    STYLE_ORDER.forEach((style) => {
+      const score = scores[style];
+      const band = STYLE_BANDS[style];
+
+      if (score >= band.highMin) {
+        strong.push(style);
+      } else if (score <= band.lowMax) {
+        weak.push(style);
+      } else {
+        moderate.push(style);
+      }
+    });
+
+    return { strong, moderate, weak };
   }
 
-  function renderChart(scores, dominantStyles) {
+  function renderChart(scores, bands) {
     els.chart.innerHTML = "";
     const max = Math.max(...Object.values(scores), 1);
     STYLE_ORDER.forEach((style) => {
       const row = document.createElement("div");
       row.className = "chart-row";
-      if (dominantStyles.includes(style)) row.classList.add("dominant");
+      if (bands.strong.includes(style)) row.classList.add("strong");
+      if (bands.weak.includes(style)) row.classList.add("weak");
 
       const label = document.createElement("div");
       label.className = "chart-label";
@@ -219,9 +236,18 @@
       value.className = "chart-value";
       value.textContent = scores[style];
 
+      const bandLabel = document.createElement("div");
+      bandLabel.className = "chart-band";
+      bandLabel.textContent = bands.strong.includes(style)
+        ? "High"
+        : bands.weak.includes(style)
+          ? "Low"
+          : "Moderate";
+
       row.appendChild(label);
       row.appendChild(track);
       row.appendChild(value);
+      row.appendChild(bandLabel);
       els.chart.appendChild(row);
 
       requestAnimationFrame(() => {
@@ -230,46 +256,70 @@
     });
   }
 
-  function renderProfile(dominantStyles) {
+  function renderProfile(scores, bands) {
     els.profile.innerHTML = "";
-    if (dominantStyles.length === 1) {
-      const style = dominantStyles[0];
+    const h2 = document.createElement("h2");
+    h2.textContent = "Your bargaining style profile";
+    els.profile.appendChild(h2);
+
+    const intro = document.createElement("p");
+    intro.textContent = "Appendix A treats these results as a profile of stronger, moderate, and weaker inclinations, not as a single right or wrong style.";
+    els.profile.appendChild(intro);
+
+    const summary = document.createElement("p");
+    if (bands.strong.length > 0) {
+      summary.textContent = "Strongest inclinations: " + bands.strong.join(", ") + ".";
+    } else {
+      const max = Math.max(...Object.values(scores));
+      const strongest = STYLE_ORDER.filter((style) => scores[style] === max);
+      summary.textContent = "No style lands in the book's high-intensity band. Your profile is mostly moderate, with the highest raw scores in " + strongest.join(", ") + ".";
+    }
+    els.profile.appendChild(summary);
+
+    if (bands.weak.length > 0) {
+      const weak = document.createElement("p");
+      weak.textContent = "Weakest inclinations: " + bands.weak.join(", ") + ".";
+      els.profile.appendChild(weak);
+    }
+
+    if (bands.strong.length === 0 && bands.weak.length === 0) {
+      const balanced = document.createElement("p");
+      balanced.textContent = "All five styles fall in the moderate range, which suggests a relatively balanced set of inclinations rather than one sharply pronounced preference.";
+      els.profile.appendChild(balanced);
+    }
+
+    bands.strong.forEach((style) => {
       const profile = STYLE_PROFILES[style];
       const tag = document.createElement("span");
       tag.className = "tag";
-      tag.textContent = profile.tag;
-      const h2 = document.createElement("h2");
-      h2.textContent = "Your dominant style: " + style;
+      tag.textContent = "High " + style;
+      const h3 = document.createElement("h3");
+      h3.textContent = style;
       const lead = document.createElement("p");
       lead.innerHTML = "<strong>" + profile.short + "</strong>";
       els.profile.appendChild(tag);
-      els.profile.appendChild(h2);
+      els.profile.appendChild(h3);
       els.profile.appendChild(lead);
       profile.long.forEach((para) => {
         const p = document.createElement("p");
         p.textContent = para;
         els.profile.appendChild(p);
       });
-    } else {
-      const h2 = document.createElement("h2");
-      h2.textContent = "Tied at the top: " + dominantStyles.join(" + ");
-      els.profile.appendChild(h2);
-      const intro = document.createElement("p");
-      intro.textContent = "Your scores are tied across more than one style. That usually means your default depends heavily on context — read each profile below and notice which one fits which situations in your life.";
-      els.profile.appendChild(intro);
-      dominantStyles.forEach((style) => {
-        const profile = STYLE_PROFILES[style];
-        const h3 = document.createElement("h3");
-        h3.style.marginTop = "16px";
-        h3.style.marginBottom = "4px";
-        h3.style.fontSize = "16px";
-        h3.textContent = style + " — " + profile.short;
-        const p = document.createElement("p");
-        p.textContent = profile.long[0];
-        els.profile.appendChild(h3);
-        els.profile.appendChild(p);
-      });
-    }
+    });
+
+    bands.weak.forEach((style) => {
+      const profile = STYLE_PROFILES[style];
+      const tag = document.createElement("span");
+      tag.className = "tag";
+      tag.textContent = "Low " + style;
+      const h3 = document.createElement("h3");
+      h3.textContent = style;
+      const p = document.createElement("p");
+      p.textContent = profile.low;
+      els.profile.appendChild(tag);
+      els.profile.appendChild(h3);
+      els.profile.appendChild(p);
+    });
   }
 
   function renderAllStyles() {
@@ -287,9 +337,9 @@
 
   function showResults() {
     const scores = tallyScores();
-    const dominant = findDominant(scores);
-    renderChart(scores, dominant);
-    renderProfile(dominant);
+    const bands = classifyScores(scores);
+    renderChart(scores, bands);
+    renderProfile(scores, bands);
     renderAllStyles();
     showScreen("results");
   }

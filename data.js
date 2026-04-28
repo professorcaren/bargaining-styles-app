@@ -23,6 +23,17 @@ const STYLE_ORDER = ["Competing", "Collaborating", "Compromising", "Avoiding", "
 
 const ITEMS_SOURCE = "bsi-items.md";
 
+// Raw-score cut points transcribed from the percentile grid in Appendix A of
+// Bargaining for Advantage. "High" corresponds to the 70th percentile or
+// higher; "Low" corresponds to the 30th percentile or lower.
+const STYLE_BANDS = {
+  Competing: { lowMax: 3, highMin: 7 },
+  Collaborating: { lowMax: 4, highMin: 8 },
+  Compromising: { lowMax: 5, highMin: 8 },
+  Avoiding: { lowMax: 3, highMin: 7 },
+  Accommodating: { lowMax: 3, highMin: 7 },
+};
+
 // Profile descriptions shown on results screen. Each style has a short
 // summary used as the dominant-style narrative and a one-liner used in the
 // "About all five styles" disclosure. Original prose, written about the
@@ -32,50 +43,55 @@ const STYLE_PROFILES = {
     tag: "Assertive · Low concern for relationship",
     short: "You go after what you want.",
     long: [
-      "Your instinct is to advocate hard for your own goals. You are comfortable with conflict, ready to argue your position, and confident framing the negotiation as something to win.",
-      "This serves you well in transactional, time-pressured, or low-relationship situations. Your risk is treating every negotiation as a contest — which is expensive in long-term relationships and in situations where the other side has information you need.",
-      "Stretch: practice asking one genuine question before making your case.",
+      "You are likely to enjoy negotiating when the stakes are high and the setting rewards leverage, pressure, deadlines, and sharp distributive moves.",
+      "This can be an advantage in transactional bargaining, but Appendix A warns that high competitors can be hard on relationships and may focus too narrowly on issues that are easiest to count as wins and losses.",
+      "Stretch: before you press your position, identify one nonquantitative issue and ask one question that might expand value instead of just claiming it.",
     ],
+    low: "A low competing score usually means you come across as nonthreatening and trustworthy, but you may be at a disadvantage when large stakes are on the table.",
     one: "Goes after what they want; comfortable with conflict; risks running over relationships.",
   },
   Collaborating: {
     tag: "Assertive · High concern for relationship",
     short: "You look for solutions that work for everyone.",
     long: [
-      "Your instinct is to dig past stated positions to find underlying interests, then build a deal that addresses both sides' priorities. You enjoy complexity and see negotiation as a problem-solving exercise.",
-      "This is the style most negotiation textbooks elevate. Its risks are real, though: collaborators can over-engineer simple deals, lose patience with people who want to be done, and leave value on the table when paired with someone who is willing to compete hard.",
-      "Stretch: notice when the situation does not actually call for collaboration, and let it be simpler.",
+      "You are likely to enjoy negotiation as an engaged problem-solving process and to probe beneath surface positions for interests, perceptions, and new options.",
+      "Appendix A treats this as a major strength, but it also warns that high collaborators can overcomplicate simple situations and may need stronger claiming skills to hold their own against a very competitive counterpart.",
+      "Stretch: check whether the situation really calls for deep joint problem solving, or whether a simpler agreement would do the job.",
     ],
+    low: "A low collaborating score often means you prefer clarity, structure, and a preset agenda, but you may become a bottleneck when a negotiation needs real-time brainstorming.",
     one: "Hunts for joint solutions; comfortable with complexity; can over-engineer simple situations.",
   },
   Compromising: {
     tag: "Moderate on both axes",
     short: "You find the middle.",
     long: [
-      "Your instinct is to reach a workable settlement quickly by splitting differences and finding a fair midpoint. You read fairness signals well and dislike protracted standoffs.",
-      "Compromise is functional and underrated — it gets deals done. The risk is reaching for the midpoint reflexively, before you have explored whether a better trade is available, or before you have tested whether the situation actually calls for holding firm.",
-      "Stretch: before splitting the difference, ask whether one more round of exploration could find something better.",
+      "You are likely to look for fair standards, close gaps, and reach closure efficiently, especially when time is short or the stakes are modest.",
+      "Appendix A notes that high compromisers are often seen as reasonable, but they can rush the process, make concessions too quickly, and settle on the first fair standard before testing whether a better deal is available.",
+      "Stretch: before splitting the difference, ask one more question about standards, interests, or trades that could improve the deal.",
     ],
+    low: "A low compromising score often reflects principle and commitment, but it can also make you seem stubborn or make it harder to close when time is short.",
     one: "Splits differences; reaches settlements quickly; risks settling before exploring.",
   },
   Avoiding: {
     tag: "Unassertive · Low concern for relationship",
     short: "You step back from negotiation when you can.",
     long: [
-      "Your instinct is to defer, defuse, or sidestep. You are sensitive to the costs of conflict — to the relationship, to the moment, to your own composure — and you weigh those costs heavily.",
-      "Avoiding is a real strategy, not an absence of one. It works when the issue is not worth the engagement, when timing is wrong, or when you need information first. The risk is that avoidance becomes the default even when the situation calls for action — so things you cared about get decided without you in the room.",
-      "Stretch: pick one negotiation per week where avoidance is the easier choice, and engage anyway.",
+      "You are likely to use tact, diplomacy, delay, structure, or intermediaries to reduce direct confrontation in negotiation.",
+      "Appendix A treats that as a real strength in some settings, but it also warns that high avoiders can let important conflicts fester and may pass up opportunities to ask for things that others would willingly grant.",
+      "Stretch: when you feel the impulse to sidestep, ask whether the issue is truly low value or whether you are about to leave something important unspoken.",
     ],
+    low: "A low avoiding score usually means you have a high tolerance for candid conflict, but others may experience you as overly confrontational or tactless.",
     one: "Defers and defuses; preserves composure; risks letting things be decided without them.",
   },
   Accommodating: {
     tag: "Unassertive · High concern for relationship",
     short: "You take care of the relationship.",
     long: [
-      "Your instinct is to attend to the other person's needs, smooth disagreements, and protect the relationship. You read emotional weather well and people often feel heard around you.",
-      "This style is genuinely valuable — many negotiations are repeat games, and people remember who treated them well. The risk is that you give ground you did not need to give, especially against a strong competitor, and you may feel the cost as resentment afterward.",
-      "Stretch: in the next negotiation, identify one issue where you will not concede first. Let the silence sit.",
+      "You are likely to derive satisfaction from solving other people's problems and from preserving the relationship around the negotiation.",
+      "Appendix A treats this as a genuine strength in team settings, service roles, and relationship management, while also warning that high accommodators can overweight the relationship and become vulnerable to more competitive counterparts.",
+      "Stretch: name one issue in advance on which you will not concede first, so concern for the relationship does not automatically become unilateral concession.",
     ],
+    low: "A low accommodating score often means you stay attached to what you see as the objectively right answer, but others may read that as stubbornness or indifference to their concerns.",
     one: "Attends to the relationship; reads emotion well; risks giving ground that did not need to be given.",
   },
 };

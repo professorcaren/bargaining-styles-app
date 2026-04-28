@@ -230,7 +230,7 @@ button.link-btn:active { color: var(--ink); }
 
 .chart-row {
   display: grid;
-  grid-template-columns: 120px 1fr 36px;
+  grid-template-columns: 120px 1fr 36px 70px;
   align-items: center;
   gap: 12px;
 }
@@ -255,14 +255,21 @@ button.link-btn:active { color: var(--ink); }
   transition: width 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.chart-row.dominant .chart-fill { background: var(--accent); }
-.chart-row.dominant .chart-label { color: var(--ink); font-weight: 600; }
+.chart-row.strong .chart-fill { background: var(--accent); }
+.chart-row.strong .chart-label { color: var(--ink); font-weight: 600; }
+.chart-row.weak .chart-fill { background: var(--ink-faint); opacity: 0.7; }
 
 .chart-value {
   font-size: 14px;
   text-align: right;
   font-variant-numeric: tabular-nums;
   color: var(--ink-soft);
+}
+
+.chart-band {
+  font-size: 13px;
+  text-align: right;
+  color: var(--ink-faint);
 }
 
 .profile {
