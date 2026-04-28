@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1a1a1a">
+  <title>Bargaining Styles Self-Assessment</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main id="app">
+    <section id="screen-intro" class="screen active">
+      <header>
+        <h1>Bargaining Styles</h1>
+        <p class="subtitle">A 30-item self-assessment</p>
+      </header>
+      <div class="intro-body">
+        <p>You will see 30 pairs of statements. For each pair, pick the one that feels <em>more accurate</em> for you in negotiations &mdash; even if neither feels exactly right.</p>
+        <p>Don&rsquo;t overthink. Don&rsquo;t pick the one you think you <em>should</em> choose. Pick the one your gut says is closer to true.</p>
+        <p class="meta">Takes about 8&ndash;10 minutes. Question and option order are randomized.</p>
+      </div>
+      <button id="btn-begin" class="primary">Begin</button>
+    </section>
+
+    <section id="screen-quiz" class="screen">
+      <div class="progress">
+        <div class="progress-bar"><div id="progress-fill"></div></div>
+        <div id="progress-text" class="progress-text">1 / 30</div>
+      </div>
+      <div class="prompt">When you are negotiating with someone, which is more accurate for you?</div>
+      <div id="options" class="options"></div>
+      <button id="btn-back" class="link-btn" hidden>&larr; Previous</button>
+    </section>
+
+    <section id="screen-results" class="screen">
+      <header>
+        <h1>Your Profile</h1>
+        <p class="subtitle">Where your instincts pull you</p>
+      </header>
+      <div id="chart" class="chart"></div>
+      <div id="profile" class="profile"></div>
+      <details class="all-styles">
+        <summary>About all five styles</summary>
+        <div id="all-styles-body"></div>
+      </details>
+      <div class="actions">
+        <button id="btn-restart" class="secondary">Take it again</button>
+      </div>
+      <p class="footnote">A snapshot of inclinations, not a verdict on who you are. Habitus is durable, not static.</p>
+    </section>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
